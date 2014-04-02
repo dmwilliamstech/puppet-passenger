@@ -9,7 +9,7 @@ class passenger($gem_bin='/usr/bin',
                 $publicPath=undef){
 
     if ! defined(Package['build-essential']){package{'build-essential':ensure=>installed}}
-    if ! defined(Package['passenger']){package{'passenger': ensure=>4.0.33 }}
+    if ! defined(Package['passenger']){package{'passenger': ensure=>'4.0.33', provider=>gem }}
     if ! defined(Package['apache2-mpm-worker']){package{'apache2-mpm-worker': ensure=>installed }}
     if ! defined(Package['apache2-threaded-dev']){package{'apache2-threaded-dev': ensure=>installed }}
     if ! defined(Package['rack']){package{'rack': provider=>gem}}
@@ -17,19 +17,6 @@ class passenger($gem_bin='/usr/bin',
     if ! defined(Package['ruby1.9.1-dev']){package{'ruby1.9.1-dev': ensure=>installed}}
     
 
-package{'ruby1.9.1-dev':
-    ensure=>installed
-} ->
-package{'rack':
-    ensure=>installed,
-    provider=>gem
-} ->
-package{'apache2-mpm-worker':
-    ensure=>installed
-} ->
-package{'apache2-threaded-dev':
-    ensure=>installed
-} ->
 exec{'compile_passenger':
     path =>$path,
     command => "passenger-install-apache2-module -a",
