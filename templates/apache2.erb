@@ -1,0 +1,26 @@
+User nobody
+Group root
+
+Listen *:<%= @port %>
+NameVirtualHost *:<%= @port%>
+#
+# NOTE: NameVirtualHost cannot be used without a port specifier
+# (e.g. :80) if mod_ssl is being used, due to the nature of the
+# SSL protocol.
+#
+LoadModule passenger_module <%= @mod_pass_loc %>
+<IfModule mod_passenger.c>
+  PassengerRoot <%= @passenger_dir %>
+  PassengerDefaultRuby <%= @rubyLoc %>
+</IfModule>
+<VirtualHost *:<%= @port %>>
+    ErrorLog /var/log/apache2/error.log
+    ServerAdmin webmaster@<%= @serverName %>.com
+    ServerName <%= @serverName %>
+		DocumentRoot <%= @publicPath %>
+    <Directory <%= @publicPath %> >
+	    AllowOverride all
+		Options -Indexes FollowSymLinks
+        
+    </Directory>
+</VirtualHost>
